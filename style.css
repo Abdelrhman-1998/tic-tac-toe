@@ -1,0 +1,413 @@
+:root{
+  --color1:#31C3BD;  /*Light Blue*/
+  --color2:#65E9E4;  /*Light Blue (hover)*/
+  --color3:#F2B137;  /*Light yellow*/
+  --color4:#FFC860;  /*Light yellow (hover)*/
+  --color5:#1A2A33;  /*Dark Navy*/
+  --color6:#1F3641;  /*Semi Dark Navy*/
+  --color7:#A8BFC9;  /*Silver*/
+  --color8:#DBE8ED;  /*Silver (hover)*/
+  font-family: 'Outfit', sans-serif;
+}
+p{
+  margin: 0px;
+}
+body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  height: inherit;
+  background-color:var(--color5) ;
+  padding: 24px;
+  height: 100vh;
+}
+.newGameMenu{
+text-align: center;
+width: 100%;
+max-width: 460px;
+font-weight: 700;
+}
+.o-turn,.x-turn{
+  background-position: 50%;
+  background-size: 32px;
+  background-repeat: no-repeat;
+  background-color: unset;
+}
+.o-turn{
+  background-image: url('./assets/icon-o-outline-silver.svg');
+  cursor: pointer;
+}
+.x-turn{
+  background-image: url('./assets/icon-x-outline-silver.svg');
+  cursor: pointer;
+}
+.o-turn.selected{
+  background-color: var(--color7);
+  background-image: url('./assets/icon-o-outline-darkNavy.svg');
+  pointer-events: none;
+  cursor: unset;
+}
+.x-turn.selected{
+  background-color: var(--color7);
+  background-image: url('./assets/icon-x-outline-darkNavy.svg');
+  pointer-events: none;
+  cursor: unset;
+}
+.gameCard.x-selected{
+  background-image: url('./assets/icon-x.svg');
+  background-repeat: no-repeat;
+  background-position: 50%;
+  pointer-events: none;
+}
+.gameCard.o-selected{
+  background-image: url('./assets/icon-o.svg');
+  background-repeat: no-repeat;
+  background-position: 50%;
+  pointer-events: none;
+}
+.gameMenuHeader{
+  margin-bottom: 32.26px;
+}
+.gameMenuBody{
+  color: var(--color7);
+  background-color: var( --color6);
+  box-shadow: inset 0px -8px 0px #10212A;
+  border-radius: 15px;
+  padding: 24px;
+}
+.playerMark{
+  margin-bottom: 24px;
+  line-height: 20px;
+  letter-spacing: 1px;
+
+}
+.playerTurnContainer{
+  display: flex;
+  justify-content: space-evenly;
+  background-color: var(--color5);
+  border-radius: 10px;
+  padding: 9px 8px;
+
+
+}
+.playerTurnContainer div{
+  width: 50%;
+  padding: 27px 0px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+}
+
+.playerTurnContainer img{
+  width: 32px;
+  height: 32px;
+}
+
+.rememberNote{
+  opacity: 50%;
+  margin-top: 17px;
+  font-size: 14px;
+  letter-spacing: 0.875px;
+  font-weight: 500;
+  line-height: 18px;
+}
+.gameMenuFooter{
+  margin-top: 32px;
+}
+.gameMenuFooter button{
+  display: block;
+  outline: 0 !important;
+  width: 100%;
+  padding-top: 14px;
+  padding-bottom: 22px;
+  border: 0px;
+  font-weight: inherit;
+  border-radius: 15px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.gameMenuFooter button:first-child{
+  background-color: var(  --color3);
+  box-shadow: inset 0px -8px 0px #CC8B13;
+  
+}
+.gameMenuFooter button:first-child:hover{
+  background-color: var(  --color4);
+}
+.gameMenuFooter button:nth-child(2){
+  background-color: var(--color1);
+  box-shadow: inset 0px -8px 0px #118C87;
+}
+.gameMenuFooter button:nth-child(2):hover{
+  background-color: var(--color2);
+}
+
+/* 
+  gameBoard
+*/
+
+.gameBoard{
+
+    min-width: 328px;
+    width: 100%;
+    max-width: 460px;
+
+}
+
+
+.gameBoardHeader{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 64px;
+  align-items: center;
+}
+.playerTurn{
+  display: flex;
+  padding: 9px 15px 13px 15px;
+  align-items: center;
+  justify-content: center;
+  color: var(--color7);
+  gap: 9px;
+  font-size: 14px;
+  background-color: var( --color6);
+  box-shadow: inset 0px -4px 0px #10212A;
+  border-radius: 5px;
+  user-select: none;
+}
+.gameLogo{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.playerTurn img{
+  width: 16px;
+  height: 16px;
+}
+.restartGame{
+  background-color: var(--color7);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0px -4px 0px #6B8997;
+  border-radius: 5px;
+  padding: 12.31px;
+  cursor: pointer;
+}
+.restartGame:hover{
+  background-color: var( --color8);
+}
+.restartGame img{
+  width: 100%;
+}
+.gameBoardBody,.gameBoardFooter{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 20px;
+}
+.gameBoardFooter{
+  margin-top: 20px;
+  text-align: center;
+}
+.gameCard{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 100%;
+  height: fit-content;
+  box-shadow: inset 0px -8px 0px #10212A;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: var( --color6);
+  background-size: 64px;
+}
+.gameCard:hover{
+  transition: 0s;
+  background-image: url('./assets/icon-x-outline.svg');
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+.gameCard.toggleHover:hover{
+  background-image: url('./assets/icon-o-outline.svg');
+}
+.score{
+  width: 100%;
+  border-radius: 15px;
+  height: 72px;
+  padding: 12px;
+  user-select: none;
+}
+.score:first-child{
+  background-color: var( --color1);
+}
+.score:nth-child(2){
+  background-color: var(--color7);
+}
+.score:last-child{
+  background-color: var(--color3);
+}
+.playerName{
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.88px;
+}
+.scoreValue{
+font-weight: 700;
+font-size: 24px;
+line-height: 30px;
+text-align: center;
+letter-spacing: 1.5px;
+}
+
+/*
+  modals 
+
+*/
+.modal-dialog{
+  width: 100%;
+  margin: 0px;
+  max-width: 100%;
+}
+.modal{
+  display: flex;
+  align-items: center;
+}
+.modal-content{
+  text-align: center;
+  background-color: var(--color6);
+}
+.winner{
+  color: var(--color7);
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.winMessage{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color3);
+  font-weight: 700;
+  font-size: 24px;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.winMessage img{
+  width: 30px;
+
+}
+.winningModal button{
+  border: 0px;
+  outline: 0;
+  padding: 15px 16px 17px 17px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+.winningModal button:first-child{
+  background-color: var( --color7);
+  box-shadow: inset 0px -4px 0px #6B8997;
+}
+.winningModal button:last-child{
+  background-color: var( --color3);
+  box-shadow: inset 0px -4px 0px #CC8B13;
+}
+.winningModal .modal-body{
+  padding: 40px 0px 48px;
+}
+.restartModal button,.drawModal{
+  outline: 0;
+  border: 0;
+}
+.restartModal div:nth-child(2),.drawModal div:nth-child(2){
+  gap: 16px;
+  font-size: 16px;
+  padding: 0px 22px;
+}
+.drawModal button{
+  border: 0;
+  outline: 0;
+}
+.restartMessage,.drawMessage{
+  font-size: 24px;
+  font-weight: 700;
+  color: var( --color7);
+  margin-bottom: 31px;
+  width: fit-content;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.restartMessage p,.drawMessage p{
+  text-align: center;
+  width: fit-content;
+  margin-bottom: 24px;
+}
+.restartMessage div button,.drawMessage div button{
+  border-radius: 10px;
+  font-weight: 700;
+}
+.restartMessage div button:first-child,.drawMessage div button:first-child{
+  padding: 15px 16px 17px 18px;
+  box-shadow: inset 0px -4px 0px #6B8997;
+  background-color: var(--color7);
+}
+.restartMessage div,.drawMessage div{
+  display: flex;
+  gap: 16px;
+}
+.restartMessage div button:last-child,.drawMessage div button:last-child{
+  padding: 15px 16px 17px 18px;
+  box-shadow: inset 0px -4px 0px #CC8B13;
+  background-color: var(--color3);
+
+}
+.restartModal .modal-bodyl,.drawModal .modal-body{
+  padding: 61px 0px;
+}
+.modal-body button:first-child:hover{
+  background-color:var( --color8) ;
+}
+.modal-body button:last-child:hover{
+  background-color: var( --color4);
+}
+
+/*
+tablet and Desktop 
+*/
+@media(max-width:508px){
+  .gameBoard{
+    align-self:flex-start;
+}
+.gameCard{
+  background-size: 40px;
+}
+}
+@media(min-width:708px){
+
+  .gameBoard{
+    align-self:center;
+  }
+  .winMessage,.restartMessage,.drawMessage{
+    font-size: 40px;
+  }
+
+  
+  .winningModal .modal-body{
+    padding: 45px 0px;
+  }
+    
+  .restartModal .modal-body,.drawModal .modal-body{
+    padding: 61px 0px 61px 0px;
+  }
+  .restartMessage p,.drawMessage p{
+    margin-bottom: 32px;
+  }
+}
