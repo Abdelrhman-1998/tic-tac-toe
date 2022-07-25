@@ -386,3 +386,4 @@ player_o_score.querySelector(".scoreValue").innerText=0;
 drawScore.querySelector(".scoreValue").innerText=0;
 restart();
 }
+// add bonus later
