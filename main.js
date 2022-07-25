@@ -39,13 +39,18 @@ else{
 }
 
 
-choices.forEach(function(ele){
+choices.forEach(function(ele,index){
     ele.addEventListener("click",function(e){
+        let anotherElement;
         if(!ele.classList.toString().includes("selected")){
-            choices.forEach(function(ele){
-                ele.classList.remove("selected");
-            })
             ele.classList.add("selected");
+            if(index===0){
+                choices[index+1].classList.remove('selected')
+            }
+            else{
+                choices[index-1].classList.remove('selected')
+            }
+          
             if(ele.classList.toString().includes("x")){
                     player1="x";
                     player2="o";
