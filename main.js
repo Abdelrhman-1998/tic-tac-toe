@@ -177,7 +177,12 @@ function randomGame(){
     let randomElementIndex=Math.floor(Math.random(0,1)*notSelectedFields.length);
     let randomElement=document.querySelectorAll(".gameCard")[notSelectedFields[randomElementIndex]];
     setGameCard(randomElement,randomElement); 
-    turn=player1;
+    if(turn==="x"){
+        turn="o";
+    }
+    else{
+        turn="x";
+    }
     toggleTurnImg();
 }
 function setGameCard(element1,element2){
