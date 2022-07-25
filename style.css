@@ -9,6 +9,12 @@
   --color8:#DBE8ED;  /*Silver (hover)*/
   font-family: 'Outfit', sans-serif;
 }
+.gameCard:hover{
+  transition: 0s;
+  background-image: url('./assets/icon-x-outline.svg');
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
 p{
   margin: 0px;
 }
@@ -228,12 +234,7 @@ font-weight: 700;
   background-color: var( --color6);
   background-size: 64px;
 }
-.gameCard:hover{
-  transition: 0s;
-  background-image: url('./assets/icon-x-outline.svg');
-  background-repeat: no-repeat;
-  background-position: 50%;
-}
+
 .gameCard.toggleHover:hover{
   background-image: url('./assets/icon-o-outline.svg');
 }

@@ -134,6 +134,7 @@ cancelRestart.addEventListener("click",function(e){
 })
 confirmRestart.addEventListener("click",function(e){
     restart();
+
     restartModal.classList.add("d-none");
 })
 
@@ -371,7 +372,11 @@ function restart(){
             ele.classList.add("toggleHover");
         }
     })
-
+    if(gameMode==="solo"){
+        if(player1!==turn){
+            cpuTurn();
+        }
+    }
 
 }
 function quit(){
