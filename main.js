@@ -249,14 +249,15 @@ function checkWinStatus(){
                drawStatus=true;
                 ++ties;
                 ++roundNumber;
-                drawScore.querySelector(".scoreValue").innerText=ties;
                if(gameMode==="solo"){
                 setTimeout(function(){
+                    drawScore.querySelector(".scoreValue").innerText=ties;
                     drawModal.classList.remove("d-none");
                     drawModal.classList.add("show");
                 },700)
                }
                else{
+                drawScore.querySelector(".scoreValue").innerText=ties;
                 drawModal.classList.remove("d-none");
                 drawModal.classList.add("show");
                }
