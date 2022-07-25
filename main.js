@@ -181,6 +181,7 @@ function randomGame(){
     toggleTurnImg();
 }
 function setGameCard(element1,element2){
+ 
         if(turn==="x"){
             element1.classList.add("x-selected");
             gameCards.forEach(function(ele){
