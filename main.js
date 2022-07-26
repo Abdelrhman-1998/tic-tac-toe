@@ -18,7 +18,6 @@ let winQuitButton=document.querySelector(".winningModal .quit");
 let drawQuitButton=document.querySelector(".drawModal .quit");
 let winNextRoundButton=document.querySelector(".winningModal .nextRound");
 let drawNextRoundButton=document.querySelector(".drawModal .nextRound");
-
 let winStatus=false;
 let drawStatus=false;
 let turn="x";
@@ -28,7 +27,97 @@ let player1,player2;
 let ties=0;
 let x_score=0;
 let o_score=0;
+let playedGames=[];
+// localStorage
+if(localStorage.gameMode===undefined){
+    newGameContainer.classList.remove("d-none");
+}
+else{
+    if(localStorage.gameMode!=="" ){
+        getLocalStorage();
+        // console.log(playedGames)
+        if(turn==="x"){
+            playerTurnImg.setAttribute("src","./assets/icon-x.svg");
 
+        }
+        else{
+            playerTurnImg.setAttribute("src","./assets/icon-o-silver.svg");
+        }
+        player_x_score.querySelector(".scoreValue").innerText=x_score;
+        player_o_score.querySelector(".scoreValue").innerText=o_score;
+        drawScore.querySelector(".scoreValue").innerText=ties;
+        fillData();
+  
+        if(winStatus){
+            if(localStorage.winner==="o"){
+                winningModal.querySelector(".winMessage").style.color="rgba(242, 177, 55, 1)";
+                winningModal.querySelector(".winMessage").querySelector("img").setAttribute("src","./assets/icon-o.svg");
+            }
+            else if(localStorage.winner==="x"){
+    
+                winningModal.querySelector(".winMessage").style.color="rgba(49, 195, 189, 1)";
+                winningModal.querySelector(".winMessage").querySelector("img").setAttribute("src","./assets/icon-x.svg");
+            }
+            if(gameMode==="solo"){
+                    if(localStorage.winner===player1){
+                        winningModal.querySelector(".winner").innerText="YOU WON!";
+                    }
+                    else{
+                        winningModal.querySelector(".winner").innerText="OH NO, YOU LOST…";
+                    }
+
+            }
+            else{
+                    if(localStorage.winner===player1){
+                        winningModal.querySelector(".winner").innerText="PLAYER 1 WINS!"
+                    }
+                    else{
+                        winningModal.querySelector(".winner").innerText="PLAYER 2 WINS!"
+                    }
+            }
+       
+            winningModal.classList.remove("d-none");
+            winningModal.classList.add("show");
+        }
+        if(drawStatus){
+           drawModal.classList.remove("d-none");
+           drawModal.classList.add("show");
+        }
+        if(gameMode==="solo"){
+            if(player1==="x"){
+                player_x_score.querySelector(".playerName").querySelector("span").innerText="YOU";
+                player_o_score.querySelector(".playerName").querySelector("span").innerText="CPU";
+            }
+            else{
+                player_x_score.querySelector(".playerName").querySelector("span").innerText="CPU";
+                player_o_score.querySelector(".playerName").querySelector("span").innerText="YOU";
+            }
+            if((winStatus===false)&& (drawStatus===false)){
+                // if(player1!==turn){
+                //     cpuTurn();
+                // }
+             
+            }
+        }
+        else{
+            if(player1==="x"){
+                player_x_score.querySelector(".playerName").querySelector("span").innerText="P1";
+                player_o_score.querySelector(".playerName").querySelector("span").innerText="P2";
+            }
+            else{
+                player_x_score.querySelector(".playerName").querySelector("span").innerText="P2";
+                player_o_score.querySelector(".playerName").querySelector("span").innerText="P1";
+            }
+        }
+        gameBoard.classList.remove("d-none");
+    }
+    else{
+        newGameContainer.classList.remove("d-none");
+    }
+    
+
+}
+// End localStorage
 if(document.querySelector(".playerTurnContainer .selected").classList.toString().includes("x")){
     player1="x";
     player2="o";
@@ -41,7 +130,6 @@ else{
 
 choices.forEach(function(ele,index){
     ele.addEventListener("click",function(e){
-        let anotherElement;
         if(!ele.classList.toString().includes("selected")){
             ele.classList.add("selected");
             if(index===0){
@@ -62,6 +150,7 @@ choices.forEach(function(ele,index){
                
             }
         }
+        updateLocalStorage();
     })
 })
 startingButtons.forEach(function(ele){
@@ -78,6 +167,7 @@ startingButtons.forEach(function(ele){
             }
             if(player1!==turn){
                 cpuTurn();
+                
             }
         }
         else{
@@ -96,6 +186,7 @@ startingButtons.forEach(function(ele){
         let container=ele.parentElement.parentElement;
         container.classList.add("d-none");
         gameBoard.classList.remove("d-none");
+        updateLocalStorage();
     })
 })
 
@@ -103,7 +194,13 @@ gameCards.forEach(function(ele,index){
         ele.addEventListener("click",function(e){
             let myele=ele;
             if(!ele.classList.toString().includes("selected")){
-                setGameCard(ele,myele); 
+                setGameCard(ele,myele,index); 
+                let playedElement=new playedGame;
+                playedElement.setClassList(ele.classList.toString());
+                playedElement.setStyle(ele.style.pointerEvents);
+                playedElement.setIndex(index);
+                playedGames.push(playedElement);
+
                 if(turn==="x"){
                     turn="o";
                     playerTurnImg.setAttribute("src","./assets/icon-o-silver.svg");
@@ -124,7 +221,7 @@ gameCards.forEach(function(ele,index){
                 toggleTurnImg();
             }
     
-            
+            updateLocalStorage();
         })
     
     
@@ -133,14 +230,16 @@ gameCards.forEach(function(ele,index){
 restartButton.addEventListener("click",function(e){
     restartModal.classList.remove("d-none");
     restartModal.classList.add("show");
+    updateLocalStorage();
 })
 cancelRestart.addEventListener("click",function(e){
     restartModal.classList.add("d-none");
+    updateLocalStorage();
 })
 confirmRestart.addEventListener("click",function(e){
     restart();
-
     restartModal.classList.add("d-none");
+    updateLocalStorage();
 })
 
 winQuitButton.addEventListener("click",function(e){
@@ -149,7 +248,7 @@ winQuitButton.addEventListener("click",function(e){
     gameBoard.classList.add("d-none");
     newGameContainer.classList.remove("d-none");
     quit();
-    
+    updateLocalStorage();
 })
 drawQuitButton.addEventListener("click",function(e){
     drawModal.classList.remove("show");
@@ -157,18 +256,19 @@ drawQuitButton.addEventListener("click",function(e){
     gameBoard.classList.add("d-none");
     newGameContainer.classList.remove("d-none");
     quit();
-    
+    updateLocalStorage();
 })
 winNextRoundButton.addEventListener("click",function(e){
     winningModal.classList.remove("show");
     winningModal.classList.add("d-none");
     restart();
+    updateLocalStorage();
 })
 drawNextRoundButton.addEventListener("click",function(e){
     drawModal.classList.remove("show");
     drawModal.classList.add("d-none");
    restart();
-
+   updateLocalStorage();
 })
 
 
@@ -181,7 +281,12 @@ function randomGame(){
     })
     let randomElementIndex=Math.floor(Math.random(0,1)*notSelectedFields.length);
     let randomElement=document.querySelectorAll(".gameCard")[notSelectedFields[randomElementIndex]];
-    setGameCard(randomElement,randomElement); 
+    setGameCard(randomElement,randomElement,notSelectedFields[randomElementIndex]); 
+    let playedElement=new playedGame;
+    playedElement.setClassList(randomElement.classList.toString());
+    playedElement.setStyle(randomElement.style.pointerEvents);
+    playedElement.setIndex(notSelectedFields[randomElementIndex]);
+    playedGames.push(playedElement);
     if(turn==="x"){
         turn="o";
     }
@@ -191,7 +296,6 @@ function randomGame(){
     toggleTurnImg();
 }
 function setGameCard(element1,element2){
- 
         if(turn==="x"){
             element1.classList.add("x-selected");
             gameCards.forEach(function(ele){
@@ -210,9 +314,7 @@ function setGameCard(element1,element2){
                 
                 })
         }
-    
-        checkWinStatus()   
-  
+        checkWinStatus();
     
 }
 
@@ -228,14 +330,17 @@ function cpuTurn(){
     gameCards.forEach(function(ele){
         ele.style="pointer-events:none;";
     })
+  
     setTimeout(function(){
-        randomGame();
+       randomGame();
         gameCards.forEach(function(ele){
             if(!ele.classList.toString().includes("selected")){
                 ele.style="";
             }
         })
+        updateLocalStorage();
     },700)
+
 }
 
 function checkWinStatus(){
@@ -275,6 +380,7 @@ function checkWinStatus(){
 
 }
 function checkWinner(game){
+    let winner;
     let diagonalOneElements=document.querySelectorAll(`.${game}-selected.d1`);
     let diagonalTwoElements=document.querySelectorAll(`.${game}-selected.d2`);
     if((diagonalOneElements.length===3) || (diagonalTwoElements.length===3)){
@@ -294,6 +400,7 @@ function checkWinner(game){
     if(winStatus){
         if(game==="x"){
             ++x_score;
+            winner=game;
             ++roundNumber;
             if(gameMode==="solo"){
                 setTimeout(function(){
@@ -308,6 +415,7 @@ function checkWinner(game){
             winningModal.querySelector(".winMessage").querySelector("img").setAttribute("src","./assets/icon-x.svg");
         }
         else{
+            winner=game;
             ++o_score;
             ++roundNumber;
             if(gameMode==="solo"){
@@ -352,11 +460,13 @@ function checkWinner(game){
         console.log(`the winner is ${game} player`)
     }
 
-
+   localStorage.winner=winner;
 }
 function restart(){
     winStatus=false;
     drawStatus=false;
+    localStorage.winner="";
+    playedGames=[];
     let class1="x-selected";
     let class2="o-selected";
     let class3="toggleHover";
@@ -404,3 +514,68 @@ drawScore.querySelector(".scoreValue").innerText=0;
 restart();
 }
 // add bonus later
+function updateLocalStorage(){
+localStorage.winStatus=winStatus;
+localStorage.drawStatus=drawStatus;
+localStorage.turn=turn;
+localStorage.roundNumber=roundNumber;
+localStorage.gameMode=gameMode;
+localStorage.player1=player1;
+localStorage.player2=player2;
+localStorage.ties=ties;
+localStorage.x_score=x_score;
+localStorage.o_score=o_score;
+localStorage.data=JSON.stringify(playedGames);
+
+
+}
+function getLocalStorage(){
+  player1=localStorage.player1;
+  player2=localStorage.player2;
+  (localStorage.winStatus==="true")?winStatus=true:winStatus=false;
+  (localStorage.drawStatus==="true")?drawStatus=true:drawStatus=false;
+  turn=localStorage.turn;
+  gameMode=localStorage.gameMode;
+  roundNumber=+localStorage.roundNumber;
+  ties=+localStorage.ties;
+  x_score=+localStorage.x_score;
+  o_score=+localStorage.o_score;
+  playedGames=JSON.parse(localStorage.data);
+
+}
+
+class playedGame{
+    classList="";
+    style="";
+    index=0;
+    setClassList(val){
+        this.classList=val;
+    }
+    setStyle(val){
+        this.style=val
+    }
+    setIndex(val){
+        this.index=val
+    }
+}
+function fillData(){
+    if(turn==="x"){
+        gameCards.forEach(function(ele){
+            ele.classList.remove("toggleHover");
+        })
+    }
+    else{
+        gameCards.forEach(function(ele){
+            ele.classList.add("toggleHover");
+        })
+    }
+
+    playedGames.forEach(function(ele,index){
+        // console.log(playedGames)
+        gameCards[ele.index].setAttribute("class",ele.classList);
+        if(ele.style==="none"){
+            gameCards[ele.index].style="pointer-events:none;"
+        }
+        
+})
+}

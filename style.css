@@ -413,3 +413,8 @@ tablet and Desktop
     margin-bottom: 32px;
   }
 }
+@media(max-width:375px){
+  .gameBoard{
+    min-width: 100%;
+  }
+}
