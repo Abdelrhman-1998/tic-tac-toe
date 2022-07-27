@@ -18,6 +18,7 @@ let winQuitButton=document.querySelector(".winningModal .quit");
 let drawQuitButton=document.querySelector(".drawModal .quit");
 let winNextRoundButton=document.querySelector(".winningModal .nextRound");
 let drawNextRoundButton=document.querySelector(".drawModal .nextRound");
+let gameBoardBody= document.querySelector(".gameBoardBody");
 let winStatus=false;
 let drawStatus=false;
 let turn="x";
@@ -30,10 +31,12 @@ let o_score=0;
 let playedGames=[];
 // localStorage
 if(localStorage.gameMode===undefined){
+
     newGameContainer.classList.remove("d-none");
 }
 else{
     if(localStorage.gameMode!=="" ){
+        gameBoard.classList.remove("d-none");
         getLocalStorage();
         // console.log(playedGames)
         if(turn==="x"){
@@ -109,9 +112,17 @@ else{
                 player_o_score.querySelector(".playerName").querySelector("span").innerText="P1";
             }
         }
-        gameBoard.classList.remove("d-none");
+      
     }
     else{
+        if(localStorage.player1==="x"){
+            choices[0].classList.add("selected");
+            choices[1].classList.remove("selected");
+        }
+        else{
+            choices[1].classList.add("selected");
+            choices[0].classList.remove("selected");
+        }
         newGameContainer.classList.remove("d-none");
     }
     
@@ -279,13 +290,26 @@ function randomGame(){
             notSelectedFields.push(index)
         }
     })
+    // select random element (easy mode)
     let randomElementIndex=Math.floor(Math.random(0,1)*notSelectedFields.length);
     let randomElement=document.querySelectorAll(".gameCard")[notSelectedFields[randomElementIndex]];
-    setGameCard(randomElement,randomElement,notSelectedFields[randomElementIndex]); 
+    let selectedIndex=notSelectedFields[randomElementIndex];
+    if(notSelectedFields.length>=8){
+        if(!gameCards[4].classList.toString().includes("selected")){
+            randomElement=gameCards[4];
+            selectedIndex=4;
+        }
+    }
+    else{
+        let data=hardMode(randomElement,selectedIndex);  // bonus 2
+        randomElement=data[0];
+        selectedIndex=data[1]
+    }
+    setGameCard(randomElement,randomElement,selectedIndex); 
     let playedElement=new playedGame;
     playedElement.setClassList(randomElement.classList.toString());
     playedElement.setStyle(randomElement.style.pointerEvents);
-    playedElement.setIndex(notSelectedFields[randomElementIndex]);
+    playedElement.setIndex(selectedIndex);
     playedGames.push(playedElement);
     if(turn==="x"){
         turn="o";
@@ -512,6 +536,16 @@ player_x_score.querySelector(".scoreValue").innerText=0;
 player_o_score.querySelector(".scoreValue").innerText=0;
 drawScore.querySelector(".scoreValue").innerText=0;
 restart();
+if(choices[0].classList.toString().includes("selected")){
+    turn="x";
+    player1=turn;
+    updateLocalStorage();
+}
+else{
+    turn="x";
+    player1="o";
+    updateLocalStorage();
+}
 }
 // add bonus later
 function updateLocalStorage(){
@@ -578,4 +612,80 @@ function fillData(){
         }
         
 })
+}
+function findIndex(row,col){
+   
+    if(row==1){                    
+        selectedIndex=col-row;
+    }
+    else if(row==2){
+ 
+        selectedIndex=col+row;
+    }
+    else{
+        selectedIndex=col+row+2;
+
+    }
+    return selectedIndex
+}
+function hardMode(randomElement,selectedIndex){
+    let data=[];
+    let randomElement1=randomElement;
+    let selectedIndex1=selectedIndex;
+    let rowNumber;
+    let columnNumber;
+    let lastPlayedGameIndices=playedGames[playedGames.length-1].classList.split(" ").slice(1,4);
+    let oppositePlayedGameIndices=playedGames[playedGames.length-2].classList.split(" ").slice(1,4);
+    let lastPlayedGameType=playedGames[playedGames.length-1].classList.split(" ").pop();
+    let oppositeGameType=playedGames[playedGames.length-2].classList.split(" ").pop();
+    let breakStatus=false;
+    for(let i=0;i<3;i++){
+      if(!breakStatus){
+        if(lastPlayedGameIndices[i]!=="toggleHover"){
+            // search for 3 matching
+            if(gameBoardBody.querySelectorAll(`.${oppositePlayedGameIndices[i]}.${oppositeGameType}`).length===2){
+                let notSelectedField=gameBoardBody.querySelector(`.${oppositePlayedGameIndices[i]}:not(.${oppositeGameType})`);
+              
+                if(notSelectedField??false){
+                    if(!notSelectedField.classList.toString().includes("selected")){
+                        rowNumber=+notSelectedField.classList.toString().split(" ")[1][1];
+                        columnNumber=+notSelectedField.classList.toString().split(" ")[2][1];
+                        console.log(rowNumber,columnNumber)
+                        randomElement1=notSelectedField;
+                        selectedIndex1= findIndex(rowNumber,columnNumber);
+                        console.log(selectedIndex1)
+                        breakStatus=true;
+                    }
+                }
+            
+            }
+            // decide to block game 
+            else if(gameBoardBody.querySelectorAll(`.${lastPlayedGameIndices[i]}.${lastPlayedGameType}`).length===2){
+                    let notSelectedField=gameBoardBody.querySelector(`.${lastPlayedGameIndices[i]}:not(.${lastPlayedGameType})`);
+                    
+                    if(notSelectedField??false){
+                        if(!notSelectedField.classList.toString().includes("selected")){
+                            rowNumber=+notSelectedField.classList.toString().split(" ")[1][1];
+                            columnNumber=+notSelectedField.classList.toString().split(" ")[2][1];
+                            randomElement1=notSelectedField;
+                            selectedIndex1= findIndex(rowNumber,columnNumber);
+                            breakStatus=true;
+                         
+                        }
+                    }
+
+     
+            }
+        }
+
+
+
+
+      }
+      else{
+        break;
+      }
+    }
+    data.push(randomElement1,selectedIndex1)
+    return data
 }
