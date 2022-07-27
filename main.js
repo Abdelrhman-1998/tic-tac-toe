@@ -641,7 +641,7 @@ function hardMode(randomElement,selectedIndex){
     let breakStatus=false;
     for(let i=0;i<3;i++){
       if(!breakStatus){
-        if(lastPlayedGameIndices[i]!=="toggleHover"){
+
             // search for 3 matching
             if(gameBoardBody.querySelectorAll(`.${oppositePlayedGameIndices[i]}.${oppositeGameType}`).length===2){
                 let notSelectedField=gameBoardBody.querySelector(`.${oppositePlayedGameIndices[i]}:not(.${oppositeGameType})`);
@@ -676,7 +676,7 @@ function hardMode(randomElement,selectedIndex){
 
      
             }
-        }
+        
 
 
 
