@@ -141,14 +141,12 @@ else{
 
 choices.forEach(function(ele,index){
     ele.addEventListener("click",function(e){
+        choices.forEach((ele)=>{
+            ele.classList.remove("selected");
+        })
+        
         if(!ele.classList.toString().includes("selected")){
             ele.classList.add("selected");
-            if(index===0){
-                choices[index+1].classList.remove('selected')
-            }
-            else{
-                choices[index-1].classList.remove('selected')
-            }
           
             if(ele.classList.toString().includes("x")){
                     player1="x";
@@ -248,7 +246,13 @@ cancelRestart.addEventListener("click",function(e){
     updateLocalStorage();
 })
 confirmRestart.addEventListener("click",function(e){
+    ties=0;
+    x_score=0;
+    o_score=0;
     restart();
+    player_x_score.querySelector(".scoreValue").innerText=x_score;
+    player_o_score.querySelector(".scoreValue").innerText=o_score;
+    drawScore.querySelector(".scoreValue").innerText=ties;
     restartModal.classList.add("d-none");
     updateLocalStorage();
 })
@@ -523,7 +527,6 @@ function restart(){
             cpuTurn();
         }
     }
-
 }
 function quit(){
 roundNumber=1;
