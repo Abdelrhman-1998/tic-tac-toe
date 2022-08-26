@@ -37,7 +37,16 @@ if(localStorage.gameMode===undefined){
 else{
     if(localStorage.gameMode!=="" ){
         gameBoard.classList.remove("d-none");
+        if(document.querySelector(".playerTurnContainer .selected").classList.toString().includes("x")){
+            player1="x";
+            player2="o";
+        }
+        else{
+            player1="o";
+            player2="x";
+        }        
         getLocalStorage();
+        console.log("player1",localStorage.player1,"player2",localStorage.player2)
         // console.log(playedGames)
         if(turn==="x"){
             playerTurnImg.setAttribute("src","./assets/icon-x.svg");
@@ -129,14 +138,6 @@ else{
 
 }
 // End localStorage
-if(document.querySelector(".playerTurnContainer .selected").classList.toString().includes("x")){
-    player1="x";
-    player2="o";
-}
-else{
-    player1="o";
-    player2="x";
-}
 
 
 choices.forEach(function(ele,index){
@@ -203,7 +204,9 @@ gameCards.forEach(function(ele,index){
         ele.addEventListener("click",function(e){
             let myele=ele;
             if(!ele.classList.toString().includes("selected")){
+                console.log("p1",localStorage.player1,"p2",localStorage.player2)
                 setGameCard(ele,myele,index); 
+                console.log("p1",localStorage.player1,"p2",localStorage.player2)
                 let playedElement=new playedGame;
                 playedElement.setClassList(ele.classList.toString());
                 playedElement.setStyle(ele.style.pointerEvents);
@@ -342,6 +345,7 @@ function setGameCard(element1,element2){
                 
                 })
         }
+        console.log(player1,player2)
         checkWinStatus();
     
 }
@@ -429,6 +433,7 @@ function checkWinner(game){
         if(game==="x"){
             ++x_score;
             winner=game;
+            localStorage.winner=winner;
             ++roundNumber;
             if(gameMode==="solo"){
                 setTimeout(function(){
@@ -444,6 +449,7 @@ function checkWinner(game){
         }
         else{
             winner=game;
+            localStorage.winner=winner;
             ++o_score;
             ++roundNumber;
             if(gameMode==="solo"){
@@ -459,7 +465,7 @@ function checkWinner(game){
         }
 
         if(gameMode==="solo"){
-            if(player1===game){
+            if(player1===winner){
                 winningModal.querySelector(".winner").innerText="YOU WON!"
             }
             else{
@@ -475,7 +481,7 @@ function checkWinner(game){
     
         }
         else{
-            if(player1===game){
+            if(player1===winner){
                 winningModal.querySelector(".winner").innerText="PLAYER 1 WINS!"
             }
             else{
@@ -488,7 +494,7 @@ function checkWinner(game){
         console.log(`the winner is ${game} player`)
     }
 
-   localStorage.winner=winner;
+
 }
 function restart(){
     winStatus=false;
